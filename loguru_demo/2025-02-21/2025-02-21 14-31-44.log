@@ -1,0 +1,7 @@
+2025-02-21 14:31:44 | INFO | loguru_test.py | <module> | 13 |  开始测试
+2025-02-21 14:31:44 | DEBUG | loguru_test.py | loguru_test | 6 | debug 日志
+2025-02-21 14:31:44 | INFO | loguru_test.py | loguru_test | 7 | info 日志
+2025-02-21 14:31:44 | ERROR | loguru_test.py | loguru_test | 8 | error 日志
+2025-02-21 14:31:44 | ERROR | loguru_test.py | loguru_test | 9 | exception 日志
+NoneType: None
+2025-02-21 14:31:44 | WARNING | loguru_test.py | loguru_test | 10 | warning 日志
