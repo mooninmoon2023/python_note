@@ -3,13 +3,13 @@ from datetime import datetime
 from pathlib import Path
 
 from loguru import logger
-from conf.path_conf import output_path
 from threading import Lock
 
 
 class Logger:
     _instance = None
     _lock = Lock()
+    log_path = Path("./")
 
     def __new__(cls, *args, **kwargs):
         with cls._lock:
@@ -41,32 +41,17 @@ class Logger:
         self._lg.add(sys.stdout, level="DEBUG", format=log_format)
 
         ## 输出到文件
-        ### 当天日志目录，如果此目录不存在则创建
+        ### 当天日志目录，如果此目录不存在则创建目录，使用 pathlib 实现而不是 os
         self.current_date = datetime.now().strftime("%Y-%m-%d")
-        current_day_log_storage_path = output_path.joinpath(self.current_date)
+        current_day_log_storage_path = self.log_path.joinpath(self.current_date)
         current_day_log_storage_path.mkdir(parents=True, exist_ok=True)
 
-        ### 当前轮次日志目录
-        self.current_round = datetime.now().strftime("%H-%M-%S")
-        self.current_round_log_storage_path = current_day_log_storage_path.joinpath(self.current_round)
-        self.current_round_log_storage_path.mkdir(parents=True, exist_ok=True)
-
         ### 日志文件路径
-        log_file_path = self.current_round_log_storage_path.joinpath(datetime.now().strftime("%Y-%m-%d %H-%M-%S.log"))
+        log_file_path = current_day_log_storage_path.joinpath(datetime.now().strftime("%Y-%m-%d %H-%M-%S.log"))
         self._lg.add(log_file_path, level="DEBUG", rotation="00:00", retention="7 days", compression="zip",
                      format=log_format)
 
 
     def get_logger(self):
         return self._lg
-
-
-    def get_current_date(self):
-        return self.current_date
-
-    def get_current_round(self):
-        return self.current_round
-
-    def get_current_round_log_storage_path(self) -> Path:
-        return self.current_round_log_storage_path
 
